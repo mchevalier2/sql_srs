@@ -65,7 +65,7 @@ with tab2:
     st.dataframe(beverages)
     st.write("table: food_items")
     st.dataframe(food_items)
-    st.write("expected:")
+    st.write("expected result:")
     st.dataframe(solution_df)
 
 with tab3:
