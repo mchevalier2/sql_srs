@@ -1,13 +1,12 @@
 # pylint: disable=missing-module-docstring
 
-import ast
 import duckdb
 import streamlit as st
 
 con = duckdb.connect(database="./data/exercises_sql_tables.duckdb", read_only=False)
 
 
-#solution_df = duckdb.sql(ANSWER_STR).df()
+# solution_df = duckdb.sql(ANSWER_STR).df()
 
 
 with st.sidebar:
@@ -19,7 +18,7 @@ with st.sidebar:
     )
     st.write("You selected:", theme)
     exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df()
-    st.write(exercise['tables'])
+    st.write(exercise["tables"])
 
 
 st.header("enter your code:")
@@ -47,8 +46,8 @@ tab2, tab3 = st.tabs(["Tables", "solution_df"])
 
 
 with tab2:
-    #print(exercise.loc[0, "tables"])
-    #print(type(exercise.loc[0, "tables"]))
+    # print(exercise.loc[0, "tables"])
+    # print(type(exercise.loc[0, "tables"]))
     exercise_tables = exercise.loc[0, "tables"]
     for table in exercise_tables:
         st.write(f"table: {table}")
@@ -62,7 +61,6 @@ with tab2:
 #
 with tab3:
     exercise_name = exercise.loc[0, "exercise_name"]
-    with open(f"./data/answers/{exercise_name}.sql", 'r') as f:
+    with open(f"./data/answers/{exercise_name}.sql", "r", encoding='utf-8') as f:
         l = f.readlines()[0]
         st.write(l)
-
