@@ -45,6 +45,7 @@ if query:
 
 tab2, tab3 = st.tabs(["Tables", "Solution"])
 
+
 with tab2:
     st.write("table: beverages")
     st.dataframe(beverages)
@@ -55,3 +56,4 @@ with tab2:
 
 with tab3:
     st.write(answer)
+
