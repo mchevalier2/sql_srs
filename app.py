@@ -1,7 +1,15 @@
 # pylint: disable=missing-module-docstring
+# pylint: disable=exec-used
+import logging
+import os
 
 import duckdb
 import streamlit as st
+
+if "exercises_sql_tables.duckdb" not in os.listdir("./data"):
+    logging.error("Database not found. Rebuilding it.")
+    with open("./init_db.py", 'r', encoding='utf-8') as f:
+        exec(f.read())
 
 con = duckdb.connect(database="./data/exercises_sql_tables.duckdb", read_only=False)
 
@@ -14,7 +22,12 @@ with st.sidebar:
     )
     st.write("You selected:", theme)
     if theme:
-        exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'").df().sort_values('last_reviewed').reset_index()
+        exercise = (
+            con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}'")
+            .df()
+            .sort_values("last_reviewed")
+            .reset_index()
+        )
         st.write(exercise["tables"])
 
         exercise_name = exercise.loc[0, "exercise_name"]
@@ -45,12 +58,11 @@ if theme:
                 f"Result has a {n_lines_difference} lines difference with the solution_df."
             )
 
-
     tab2, tab3 = st.tabs(["Tables", "solution_df"])
 
     with tab2:
-        #print(exercise.loc[0, "tables"])
-        #print(type(exercise.loc[0, "tables"]))
+        # print(exercise.loc[0, "tables"])
+        # print(type(exercise.loc[0, "tables"]))
         exercise_tables = exercise.loc[0, "tables"]
         for table in exercise_tables:
             st.write(f"table: {table}")

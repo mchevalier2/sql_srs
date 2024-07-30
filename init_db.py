@@ -6,7 +6,11 @@ import os
 import duckdb
 import pandas as pd
 
-os.remove("data/exercises_sql_tables.duckdb")
+try:
+    os.remove("data/exercises_sql_tables.duckdb")
+except FileNotFoundError:
+    pass
+
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 # ------------------------------------------------------------
