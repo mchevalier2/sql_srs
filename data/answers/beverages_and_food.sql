@@ -1,1 +1,1 @@
-SELECT * FROM beverages CROSS JOIN food_items, salut
+SELECT * FROM beverages CROSS JOIN food_items
