@@ -61,6 +61,6 @@ with tab2:
 #
 with tab3:
     exercise_name = exercise.loc[0, "exercise_name"]
-    with open(f"./data/answers/{exercise_name}.sql", "r", encoding='utf-8') as f:
+    with open(f"./data/answers/{exercise_name}.sql", "r", encoding="utf-8") as f:
         l = f.readlines()[0]
         st.write(l)
