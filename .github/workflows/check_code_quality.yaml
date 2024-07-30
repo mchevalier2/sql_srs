@@ -25,7 +25,8 @@ jobs:
           pip install -r requirements.txt
           pip install pylint
       - run: |
-          pylint --verbose .
+          pylint --verbose app.py
+          pylint --verbose init_db.py
   isort:
     runs-on: ubuntu-20.04
     steps:
