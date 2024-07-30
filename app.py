@@ -1,4 +1,5 @@
 # pylint: disable=missing-module-docstring
+# pylint: disable=possibly-used-before-assignment
 import logging
 import os
 import subprocess
@@ -14,10 +15,37 @@ if "exercises_sql_tables.duckdb" not in os.listdir("./data"):
 
 con = duckdb.connect(database="./data/exercises_sql_tables.duckdb", read_only=False)
 
+
+def compare_results_user(query_user: str) -> None:
+    """
+    Check that user's SQL query generates the right output by
+    1) Checking the number of rows and columns
+    2) Checking the values inside the table
+    :param query_user: The query retrieved from the user interface.
+    """
+    try:
+        result = con.execute(query_user).df()
+        st.dataframe(result)
+    except duckdb.CatalogException:
+        st.write("This SQL request is not valid.")
+    try:
+        result = result[solution_df.columns]
+        st.dataframe(result.compare(solution_df))
+    except KeyError:
+        st.write("Some columns are missing.")
+    n_lines_difference = result.shape[0] - solution_df.shape[0]
+    if n_lines_difference != 0:
+        st.write(
+            f"Result has a {n_lines_difference} lines difference with the solution_df."
+        )
+
+
 with st.sidebar:
+    list_themes = con.execute("SELECT DISTINCT theme FROM memory_state").df()
+
     theme = st.selectbox(
         "What would you like to review?",
-        ("cross_joins", "GroupBy", "Windows Functions"),
+        list_themes,
         index=None,
         placeholder="Select a theme...",
     )
@@ -37,27 +65,12 @@ with st.sidebar:
 
         solution_df = con.execute(solution).df()
 
+
 if theme:
     st.header("enter your code:")
     query = st.text_area(label="Votre code SQL ici", key="user_input")
     if query:
-        try:
-            result = con.execute(query).df()
-            st.dataframe(result)
-        except duckdb.CatalogException as e:
-            st.write("This SQL request is not valid.")
-
-        try:
-            result = result[solution_df.columns]
-            st.dataframe(result.compare(solution_df))
-        except KeyError as e:
-            st.write("Some columns are missing.")
-
-        n_lines_difference = result.shape[0] - solution_df.shape[0]
-        if n_lines_difference != 0:
-            st.write(
-                f"Result has a {n_lines_difference} lines difference with the solution_df."
-            )
+        compare_results_user(query)
 
     tab2, tab3 = st.tabs(["Tables", "solution_df"])
 
