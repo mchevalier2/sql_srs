@@ -1,15 +1,16 @@
 # pylint: disable=missing-module-docstring
-# pylint: disable=exec-used
 import logging
 import os
+import subprocess
+import sys
 
 import duckdb
 import streamlit as st
 
 if "exercises_sql_tables.duckdb" not in os.listdir("./data"):
     logging.error("Database not found. Rebuilding it.")
-    with open("./init_db.py", 'r', encoding='utf-8') as f:
-        exec(f.read())
+    with open("./init_db.py", "r", encoding="utf-8") as f:
+        subprocess.run(sys.executable, stdin=f, check=True)
 
 con = duckdb.connect(database="./data/exercises_sql_tables.duckdb", read_only=False)
 

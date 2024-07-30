@@ -3,5 +3,5 @@ venv/
 .DS_Store
 venv_collegue/
 test_db.py
-./data/*.duckdb
+data/exercises_sql_tables.duckdb
 *.csv
