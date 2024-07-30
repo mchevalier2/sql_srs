@@ -1,7 +1,9 @@
 import io
+import os
 import pandas as pd
 import duckdb
 
+os.remove("data/exercises_sql_tables.duckdb")
 con = duckdb.connect(database="data/exercises_sql_tables.duckdb", read_only=False)
 
 # ------------------------------------------------------------
